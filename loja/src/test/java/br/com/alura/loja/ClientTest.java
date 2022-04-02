@@ -66,4 +66,23 @@ public class ClientTest {
 		String conteudo = client.target(location).request().get(String.class);
 		Assert.assertTrue(conteudo.contains("Tablet"));
 	}
+
+	@Test
+	public void testaQueDeletaUmProdutoNoCarrinho() {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080");
+		Response response = target.path("/carrinhos/1/produtos/6237").request().delete();
+		Assert.assertEquals(200, response.getStatus());
+
+		String conteudo = target.path("/carrinhos/1").request().get(String.class);
+		Assert.assertTrue(!conteudo.contains("Videogame"));
+	}
+
+	@Test
+	public void testeQueDeletaUmCarrinho() {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080");
+		Response response = target.path("/carrinhos/1").request().delete();
+		Assert.assertEquals(200, response.getStatus());
+	}
 }
